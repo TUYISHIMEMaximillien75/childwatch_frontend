@@ -1,10 +1,10 @@
 import { getAuthToken } from "../utils/authStorage";
 
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 async function request(path, options = {}) {
   const token = getAuthToken();
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -17,13 +17,13 @@ async function request(path, options = {}) {
   return data;
 }
 
-export const getInstitutionStats = () => request("/api/institution/stats");
-export const getInstitutionStaff = () => request("/api/institution/staff");
+export const getInstitutionStats = () => request("/institution/stats");
+export const getInstitutionStaff = () => request("/institution/staff");
 export const getInstitutionCases = (params = {}) => {
   const qs = new URLSearchParams(
     Object.entries(params).filter(([, v]) => v && v !== "All")
   ).toString();
-  return request(`/api/institution/cases${qs ? `?${qs}` : ""}`);
+  return request(`/institution/cases${qs ? `?${qs}` : ""}`);
 };
-export const getInstitutionMonthly = () => request("/api/institution/monthly");
-export const getInstitutionLogs    = () => request("/api/institution/logs");
+export const getInstitutionMonthly = () => request("/institution/monthly");
+export const getInstitutionLogs    = () => request("/institution/logs");

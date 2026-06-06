@@ -589,7 +589,7 @@ function UsersSection() {
                 </div>
               ))}
               {[["Role","role",["Police","Hospital","Social Worker","Parent/Reporter"]],
-                ["District","district",["Gasabo","Kicukiro","Nyarugenge","Rubavu","Musanze","Bugesera"]]].map(([lbl,key,opts]) => (
+                ["District","district",["Gasabo","Kicukiro","Nyarugenge","Bugesera","Gatsibo","Kayonza","Kirehe","Ngoma","Nyagatare","Rwamagana","Burera","Gakenke","Gicumbi","Musanze","Rulindo","Gisagara","Huye","Kamonyi","Muhanga","Nyamagabe","Nyamasheke","Nyanza","Ruhango","Karongi","Ngororero","Nyabihu","Rubavu","Rutsiro","Rusizi"]]].map(([lbl,key,opts]) => (
                 <div key={key}>
                   <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">{lbl}</label>
                   <select
@@ -685,7 +685,7 @@ function InstitutionModal({ mode, institution, onClose, onSaved }) {
                 className={inputClass} placeholder={lbl} />
             </div>
           ))}
-          {[["Type","type",["Police","Hospital","Social Worker","NGO"]],["District","district",["Gasabo","Kicukiro","Nyarugenge","Rubavu","Musanze","Bugesera","Huye"]],["Status","status",["active","maintenance","inactive"]]].map(([lbl,key,opts]) => (
+          {[["Type","type",["Police","Hospital","Social Worker","NGO"]],["District","district",["Gasabo","Kicukiro","Nyarugenge","Bugesera","Gatsibo","Kayonza","Kirehe","Ngoma","Nyagatare","Rwamagana","Burera","Gakenke","Gicumbi","Musanze","Rulindo","Gisagara","Huye","Kamonyi","Muhanga","Nyamagabe","Nyamasheke","Nyanza","Ruhango","Karongi","Ngororero","Nyabihu","Rubavu","Rutsiro","Rusizi"]],["Status","status",["active","maintenance","inactive"]]].map(([lbl,key,opts]) => (
             <div key={key}>
               <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">{lbl}</label>
               <select disabled={isView} value={form[key]} onChange={e => setForm({...form,[key]:e.target.value})}

@@ -4,6 +4,7 @@ import ChildwatchPublicPage from "./pages/ChildwatchPublicPage";
 import PublicReport from "./pages/PublicReport";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import AdminSignup from "./pages/AdminSignup";
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/Admindashboard";
@@ -30,6 +31,7 @@ function App() {
       <Route path="/admin/signup" element={<AdminSignup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Admin */}
       <Route element={<ProtectedRoute requiredRole="admin" />}>

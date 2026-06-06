@@ -1,10 +1,10 @@
 import { getAuthToken } from "../utils/authStorage";
 
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 async function request(path, options = {}) {
   const token = getAuthToken();
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -17,13 +17,13 @@ async function request(path, options = {}) {
   return data;
 }
 
-// GET /api/notifications
-export const getNotifications = () => request("/api/notifications");
+// GET /notifications
+export const getNotifications = () => request("/notifications");
 
-// PATCH /api/notifications/:id/read
+// PATCH /notifications/:id/read
 export const markNotificationRead = (id) =>
-  request(`/api/notifications/${id}/read`, { method: "PATCH" });
+  request(`/notifications/${id}/read`, { method: "PATCH" });
 
-// PATCH /api/notifications/read-all
+// PATCH /notifications/read-all
 export const markAllNotificationsRead = () =>
-  request("/api/notifications/read-all", { method: "PATCH" });
+  request("/notifications/read-all", { method: "PATCH" });

@@ -19,8 +19,16 @@ import { useTheme } from "../contexts/ThemeContext";
 const REPORT_TYPES = ["Missing", "Abuse"];
 
 const DISTRICTS = [
-  "Gasabo", "Kicukiro", "Nyarugenge", "Rubavu", "Musanze",
-  "Bugesera", "Huye", "Muhanga", "Rwamagana", "Karongi",
+  // Kigali City
+  "Gasabo", "Kicukiro", "Nyarugenge",
+  // Eastern Province
+  "Bugesera", "Gatsibo", "Kayonza", "Kirehe", "Ngoma", "Nyagatare", "Rwamagana",
+  // Northern Province
+  "Burera", "Gakenke", "Gicumbi", "Musanze", "Rulindo",
+  // Southern Province
+  "Gisagara", "Huye", "Kamonyi", "Muhanga", "Nyamagabe", "Nyamasheke", "Nyanza", "Ruhango",
+  // Western Province
+  "Karongi", "Ngororero", "Nyabihu", "Rubavu", "Rutsiro", "Rusizi",
 ];
 
 export default function PublicReport() {

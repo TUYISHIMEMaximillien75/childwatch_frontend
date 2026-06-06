@@ -1,10 +1,10 @@
 import { getAuthToken } from "../utils/authStorage";
 
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 async function request(path, options = {}) {
   const token = getAuthToken();
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -20,17 +20,17 @@ async function request(path, options = {}) {
 export const getPoliceCases = (params = {}) => {
   const entries = Object.entries(params).filter(([, v]) => v && v !== "All");
   const qs = new URLSearchParams(entries).toString();
-  return request(`/api/police/cases${qs ? `?${qs}` : ""}`);
+  return request(`/police/cases${qs ? `?${qs}` : ""}`);
 };
 
-export const getPoliceStats = () => request("/api/police/stats");
+export const getPoliceStats = () => request("/police/stats");
 
 export const updatePoliceCaseStatus = (id, status) =>
-  request(`/api/police/cases/${id}/status`, {
+  request(`/police/cases/${id}/status`, {
     method: "PATCH",
     body: JSON.stringify({ status }),
   });
 
-export const getPoliceAlerts       = () => request("/api/police/alerts");
-export const getPoliceDistrictStats = () => request("/api/police/district-stats");
+export const getPoliceAlerts       = () => request("/police/alerts");
+export const getPoliceDistrictStats = () => request("/police/district-stats");
 
