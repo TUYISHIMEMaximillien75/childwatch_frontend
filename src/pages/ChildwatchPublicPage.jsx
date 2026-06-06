@@ -33,7 +33,7 @@ const navItems = [
   { label: "Overview", href: "#overview" },
   { label: "Reports", href: "#reports" },
   { label: "Alerts", href: "#alerts" },
-  { label: "Analytics", href: "#analytics" },
+  { label: "How it Works", href: "#how-it-works" },
 ];
 
 const mockStats = [
@@ -219,37 +219,85 @@ function FamilyIllustration() {
   );
 }
 
-/* ─── Bar Chart ─── */
-function BarChart() {
-  const values = [48, 66, 52, 74, 88, 71, 95, 82, 108, 97, 116, 124];
-  const max = Math.max(...values);
+/* ─── How it Works ─── */
+function HowItWorks() {
+  const steps = [
+    {
+      title: "1. See Something, Say Something",
+      desc: "Anyone can submit an anonymous report with photos, location, and details via the mobile app or web portal.",
+      icon: ShieldAlert,
+      color: "blue"
+    },
+    {
+      title: "2. Rapid Triage & Action",
+      desc: "The system instantly notifies the nearest police unit and social workers, prioritizing urgent cases like missing children.",
+      icon: Activity,
+      color: "red"
+    },
+    {
+      title: "3. Multi-Agency Collaboration",
+      desc: "Police investigate while social workers provide care. All agencies share secure updates on the same case file.",
+      icon: Users,
+      color: "amber"
+    },
+    {
+      title: "4. Safe Resolution",
+      desc: "The child is recovered, placed in safe care, and the community is updated. The case is securely archived.",
+      icon: CheckCircle2,
+      color: "emerald"
+    }
+  ];
+
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-        <div>
-          <h2 className="text-base font-extrabold text-slate-950 dark:text-white sm:text-lg">Statistics and Analytics</h2>
-          <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">Monthly reporting trend — verified child protection cases.</p>
-        </div>
-        <span className="w-fit shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-          +23% coverage
-        </span>
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+      <div className="mb-8 max-w-2xl">
+        <h2 className="text-xl font-extrabold text-slate-950 dark:text-white sm:text-2xl">How Childwatch Works</h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400 sm:text-base">
+          Childwatch is designed to bridge the gap between vigilant community members and rapid-response authorities. Here is how a typical user journey unfolds to protect a child.
+        </p>
       </div>
-      <div className="mt-5 flex h-32 items-end gap-1 sm:h-40 sm:gap-1.5">
-        {values.map((value, index) => (
-          <div key={index} className="flex flex-1 flex-col items-center gap-1.5">
-            <div
-              className="w-full rounded-t-md"
-              style={{
-                height: `${(value / max) * 112}px`,
-                opacity: index % 3 === 1 ? 0.75 : 1,
-                backgroundColor: index === 8 ? "#10B981" : "#2563EB",
-              }}
-            />
-            <span className="text-[9px] font-semibold text-slate-400 sm:text-[10px]">
-              {"JFMAMJJASOND"[index]}
-            </span>
-          </div>
-        ))}
+      
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {steps.map((step, idx) => {
+          const Icon = step.icon;
+          const bgMap = {
+            blue: "bg-blue-50 dark:bg-blue-900/30",
+            red: "bg-red-50 dark:bg-red-900/30",
+            amber: "bg-amber-50 dark:bg-amber-900/30",
+            emerald: "bg-emerald-50 dark:bg-emerald-900/30"
+          };
+          const textMap = {
+            blue: "text-blue-700 dark:text-blue-400",
+            red: "text-red-700 dark:text-red-400",
+            amber: "text-amber-700 dark:text-amber-400",
+            emerald: "text-emerald-700 dark:text-emerald-400"
+          };
+          
+          return (
+            <div key={idx} className="relative">
+              {idx < steps.length - 1 && (
+                <div className="hidden lg:block absolute top-8 left-[60%] w-full h-[2px] bg-slate-100 dark:bg-slate-800" />
+              )}
+              <div className={`mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl ${bgMap[step.color]} relative z-10`}>
+                <Icon className={`h-8 w-8 ${textMap[step.color]}`} />
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">{step.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                {step.desc}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-8 rounded-2xl bg-slate-50 p-6 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h4 className="font-bold text-slate-900 dark:text-white">Ready to help?</h4>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Your report could save a child's life today.</p>
+        </div>
+        <Link to="/report" className="shrink-0 rounded-xl bg-blue-700 px-6 py-3 text-sm font-bold text-white hover:bg-blue-800 transition-colors">
+          Start a Report
+        </Link>
       </div>
     </div>
   );
@@ -636,49 +684,9 @@ export default function ChildwatchPublicPage() {
             </div>
           </section>
 
-          {/* Analytics */}
-          <section id="analytics" className="grid gap-4 sm:gap-6 xl:grid-cols-2">
-            <BarChart />
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-base font-extrabold text-slate-950 dark:text-white sm:text-lg">Active Investigations by District</h2>
-                  <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">Blue and green show routine response; red is reserved for critical alerts.</p>
-                </div>
-                <MapPin className="h-5 w-5 shrink-0 text-blue-700" />
-              </div>
-              <div className="mt-5 space-y-3 sm:space-y-4">
-                {districtsData.map((district) => (
-                  <div key={district.name}>
-                    <div className="mb-1.5 flex justify-between gap-3 text-sm">
-                      <span className="font-bold text-slate-700 dark:text-slate-300">{district.name}</span>
-                      <span className="font-bold text-slate-950 dark:text-white">{district.value}</span>
-                    </div>
-                    <div className="h-2.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800 sm:h-3">
-                      <div
-                        className="h-full rounded-full transition-all duration-500"
-                        style={{
-                          width: `${totalDistrictCases > 0 ? Math.min((district.value / totalDistrictCases) * 280, 100) : 0}%`,
-                          backgroundColor: district.color,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                <div className="rounded-2xl bg-blue-50 p-3 dark:bg-blue-500/10 sm:p-4">
-                  <Clock3 className="h-5 w-5 text-blue-700" />
-                  <p className="mt-2 text-xl font-extrabold text-blue-950 dark:text-white sm:text-2xl">1.4h</p>
-                  <p className="text-xs text-blue-800/70 dark:text-blue-300 sm:text-sm">Avg response time</p>
-                </div>
-                <div className="rounded-2xl bg-emerald-50 p-3 dark:bg-emerald-500/10 sm:p-4">
-                  <Users className="h-5 w-5 text-emerald-700" />
-                  <p className="mt-2 text-xl font-extrabold text-emerald-950 dark:text-white sm:text-2xl">36</p>
-                  <p className="text-xs text-emerald-800/70 dark:text-emerald-300 sm:text-sm">Partner institutions</p>
-                </div>
-              </div>
-            </div>
+          {/* How it Works */}
+          <section id="how-it-works" className="mt-8">
+            <HowItWorks />
           </section>
 
         </div>
