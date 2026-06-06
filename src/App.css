@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --simba-primary: #1E3A8A;
+  --simba-primary-hover: #2563EB;
+  --simba-primary-dark: #172554;
+  --simba-secondary: #2563EB;
+  --simba-secondary-hover: #1D4ED8;
+  --simba-soft-red: #FEE2E2;
+
+  --simba-success: #10B981;
+  --simba-success-strong: #059669;
+  --simba-warning: #F59E0B;
+  --simba-risk: #DC2626;
+
+  --simba-bg-main: #F8FAFC;
+  --simba-bg-secondary: #EFF6FF;
+  --simba-card: #FFFFFF;
+  --simba-surface: #F1F5F9;
+  --simba-border: #E2E8F0;
+
+  --simba-text-primary: #1F2937;
+  --simba-text-secondary: #4B5563;
+  --simba-text-muted: #9CA3AF;
+  --simba-text-on-gold: #111827;
+  --simba-text-on-red: #FFFFFF;
+
+  color-scheme: light;
+}
+
+/* Global palette remap for existing utility classes across all pages. */
+@theme inline {
+  /* Protection blue */
+  --color-blue-50: #EFF6FF;
+  --color-blue-100: #DBEAFE;
+  --color-blue-200: #BFDBFE;
+  --color-blue-300: #93C5FD;
+  --color-blue-400: #60A5FA;
+  --color-blue-500: #3B82F6;
+  --color-blue-600: var(--simba-secondary);
+  --color-blue-700: #1D4ED8;
+  --color-blue-800: var(--simba-primary);
+  --color-blue-900: #172554;
+
+  /* Secondary + risk (red) */
+  --color-red-50: var(--simba-soft-red);
+  --color-red-100: #FECACA;
+  --color-red-200: #FCA5A5;
+  --color-red-300: #F87171;
+  --color-red-400: #EF4444;
+  --color-red-500: #EF4444;
+  --color-red-600: var(--simba-risk);
+  --color-red-700: #B91C1C;
+  --color-red-800: #991B1B;
+  --color-red-900: #7F1D1D;
+
+  /* Trust status */
+  --color-green-50: #ECFDF5;
+  --color-green-100: #D1FAE5;
+  --color-green-200: #A7F3D0;
+  --color-green-300: #6EE7B7;
+  --color-green-400: #34D399;
+  --color-green-500: var(--simba-success);
+  --color-green-600: #059669;
+  --color-green-700: #047857;
+  --color-green-800: #166534;
+  --color-green-900: #14532D;
+
+  --color-emerald-50: #ECFDF5;
+  --color-emerald-100: #D1FAE5;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+
+  --color-amber-50: #FFFBEB;
+  --color-amber-100: #FEF3C7;
+  --color-amber-200: #FDE68A;
+  --color-amber-500: var(--simba-warning);
+  --color-amber-600: #D97706;
+  --color-amber-700: #B45309;
+
+  /* Neutral surfaces + typography */
+  --color-slate-50: var(--simba-bg-main);
+  --color-slate-100: var(--simba-surface);
+  --color-slate-200: var(--simba-border);
+  --color-slate-300: #CBD5E1;
+  --color-slate-400: var(--simba-text-muted);
+  --color-slate-500: var(--simba-text-secondary);
+  --color-slate-600: #374151;
+  --color-slate-700: #1F2937;
+  --color-slate-800: #1E293B;
+  --color-slate-900: #111827;
+  --color-slate-950: #0B1120;
+
+  --color-zinc-50: var(--color-slate-50);
+  --color-zinc-100: var(--color-slate-100);
+  --color-zinc-200: var(--color-slate-200);
+  --color-zinc-300: var(--color-slate-300);
+  --color-zinc-400: var(--color-slate-400);
+  --color-zinc-500: var(--color-slate-500);
+  --color-zinc-600: var(--color-slate-600);
+  --color-zinc-700: var(--color-slate-700);
+  --color-zinc-800: var(--color-slate-800);
+  --color-zinc-900: var(--color-slate-900);
+  --color-zinc-950: var(--color-slate-950);
+
+  --color-gray-50: var(--color-slate-50);
+  --color-gray-100: var(--color-slate-100);
+  --color-gray-200: var(--color-slate-200);
+  --color-gray-300: var(--color-slate-300);
+  --color-gray-400: var(--color-slate-400);
+  --color-gray-500: var(--color-slate-500);
+  --color-gray-600: var(--color-slate-600);
+  --color-gray-700: var(--color-slate-700);
+  --color-gray-800: var(--color-slate-800);
+  --color-gray-900: var(--color-slate-900);
+  --color-gray-950: var(--color-slate-950);
+
+  --color-cyan-50: #ECFEFF;
+  --color-cyan-100: #CFFAFE;
+  --color-cyan-700: #0E7490;
+
+  --color-teal-50: #ECFDF3;
+  --color-teal-600: #16A34A;
+  --color-teal-700: #15803D;
+
+  --color-orange-50: #FFF7ED;
+  --color-orange-200: #FED7AA;
+  --color-orange-700: #C2410C;
+
+  --color-yellow-50: #EFF6FF;
+  --color-yellow-400: #3B82F6;
+  --color-yellow-500: #2563EB;
+  --color-yellow-600: #1D4ED8;
+  --color-yellow-700: #1E3A8A;
+
+  --color-purple-500: var(--simba-secondary);
+
+  --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 15px currentColor;
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 5px currentColor;
+  }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    background-color: var(--simba-bg-main);
+    color: var(--simba-text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+.bg-brand-gradient {
+  background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
+}
+
+.bg-gold-luxury-gradient {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 50%, #BFDBFE 100%);
+}
+
+.bg-premium-dark-gradient {
+  background: linear-gradient(135deg, #172554 0%, #1E3A8A 50%, #0F172A 100%);
+}
+
+.shadow-gold-glow {
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.16);
+}
+
+.shadow-red-glow {
+  box-shadow: 0 8px 24px rgba(215, 25, 32, 0.14);
+}
