@@ -1,6 +1,7 @@
 import { getAuthToken } from "../utils/authStorage";
 
-const API = "http://localhost:5000/api/admin";
+const API = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/admin` : "http://localhost:5000/api/admin";
+const UPLOAD_API = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/uploads` : "http://localhost:5000/api/uploads";
 
 function authHeaders() {
   return { Authorization: `Bearer ${getAuthToken()}` };
@@ -92,7 +93,7 @@ export async function sendAdminAlert(sentTo, message) {
 
 // GET /api/uploads/admin — list all evidence files
 export async function fetchAdminEvidence() {
-  const res = await fetch("http://localhost:5000/api/uploads/admin", {
+  const res = await fetch(`${UPLOAD_API}/admin`, {
     headers: authHeaders(),
   });
   if (!res.ok) throw new Error("Failed to fetch evidence");
@@ -101,7 +102,7 @@ export async function fetchAdminEvidence() {
 
 // DELETE /api/uploads/:id
 export async function deleteEvidence(id) {
-  const res = await fetch(`http://localhost:5000/api/uploads/${id}`, {
+  const res = await fetch(`${UPLOAD_API}/${id}`, {
     method: "DELETE",
     headers: authHeaders(),
   });

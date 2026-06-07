@@ -1,6 +1,6 @@
 import { getAuthToken } from "../utils/authStorage";
 
-const BASE_URL = "http://localhost:5000/api/admin/audit-logs";
+const BASE_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/admin/audit-logs` : "http://localhost:5000/api/admin/audit-logs";
 
 export async function fetchAuditLogs(limit = 100, offset = 0) {
   const token = getAuthToken();

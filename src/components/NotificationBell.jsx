@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Bell, CheckCheck, ExternalLink } from "lucide-react";
 import { getAuthToken } from "../utils/authStorage";
 
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "");
 
 async function apiFetch(path, options = {}) {
   const token = getAuthToken();

@@ -279,8 +279,8 @@ function DashboardSection() {
           </div>
           <BarChart data={monthly} />
           <div className="flex justify-between mt-2">
-            {["J","F","M","A","M","J","J","A","S","O","N","D"].map(m => (
-              <span key={m} className="text-[10px] text-slate-400 flex-1 text-center">{m}</span>
+            {["J","F","M","A","M","J","J","A","S","O","N","D"].map((m, i) => (
+              <span key={i} className="text-[10px] text-slate-400 flex-1 text-center">{m}</span>
             ))}
           </div>
         </div>

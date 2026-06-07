@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Upload, FileText, Image, Film, X, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { getAuthToken } from "../utils/authStorage";
 
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "");
 
 const ICON_MAP = {
   image:    <Image className="w-4 h-4 text-blue-500" />,
