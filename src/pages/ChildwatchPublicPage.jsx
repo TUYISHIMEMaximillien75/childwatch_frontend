@@ -27,6 +27,8 @@ import {
 import { useInstallPrompt } from "../hooks/useInstallPrompt";
 import heroImage from "../assets/childwatch_hero.png";
 import communityPortalImage from "../assets/community_portal.png";
+import parentReunionImage from "../assets/parent_reunion.png";
+import communitySupportImage from "../assets/community_support.png";
 import { useTheme } from "../contexts/ThemeContext";
 
 const navItems = [
@@ -603,83 +605,96 @@ export default function ChildwatchPublicPage() {
             </div>
           </section>
 
-          {/* Stats grid */}
-          <section className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-            {statsData.map((item) => <StatCard key={item.label} item={item} />)}
-          </section>
-
-          {/* Reports + Alerts */}
-          <section id="reports" className="grid gap-4 sm:gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-            {/* Reports */}
-            <div id="alerts" className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-5">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h2 className="text-base font-extrabold text-slate-950 dark:text-white sm:text-lg">Recent Reports</h2>
-                  <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">Newest reports entering triage.</p>
-                </div>
-              </div>
-
-              {/* Mobile: cards */}
-              <div className="mt-4 grid gap-3 sm:hidden">
-                {reportsData.map((report) => (
-                  <ReportCard key={report.id} report={report} />
+          {/* Mission & Impact */}
+          <section id="impact" className="mt-8 sm:mt-12 grid gap-8 lg:grid-cols-2 lg:items-center">
+            <div className="order-2 lg:order-1">
+              <span className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-800 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/30">
+                <HeartHandshake className="h-3.5 w-3.5" /> Our Mission
+              </span>
+              <h2 className="mt-4 text-3xl font-extrabold text-slate-950 dark:text-white sm:text-4xl lg:text-5xl tracking-tight">
+                Reuniting Families, Restoring Hope
+              </h2>
+              <p className="mt-5 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                Every second counts when a child is missing or in danger. Childwatch empowers communities and authorities to act swiftly, turning anxious moments into tears of joy.
+              </p>
+              
+              <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
+                {statsData.map((item) => (
+                  <div key={item.label} className="flex flex-col gap-1 border-l-4 border-blue-600 pl-4 py-1">
+                    <p className="text-3xl font-black text-slate-900 dark:text-white">{item.value}</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">{item.label}</p>
+                  </div>
                 ))}
-              </div>
-
-              {/* Desktop: table */}
-              <div className="mt-4 hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 sm:block">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-slate-50 text-slate-500 dark:bg-slate-950 dark:text-slate-400">
-                    <tr>
-                      <th className="px-4 py-3 font-bold">Case ID</th>
-                      <th className="px-4 py-3 font-bold">Type</th>
-                      <th className="px-4 py-3 font-bold">District</th>
-                      <th className="px-4 py-3 font-bold">Time</th>
-                      <th className="px-4 py-3 font-bold">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 bg-white dark:divide-slate-800 dark:bg-slate-900">
-                    {reportsData.map((report) => (
-                      <tr key={report.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                        <td className="px-4 py-3 font-mono font-bold text-blue-700">{report.id}</td>
-                        <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">{report.type}</td>
-                        <td className="px-4 py-3 text-slate-600 dark:text-slate-400">{report.district}</td>
-                        <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{report.time}</td>
-                        <td className="px-4 py-3">
-                          <span className={`rounded-full border px-2.5 py-1 text-xs font-bold ${statusClasses(report.status)}`}>
-                            {report.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
             </div>
 
-            {/* Alerts */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-base font-extrabold text-slate-950 dark:text-white sm:text-lg">Emergency Alerts</h2>
-                  <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">Signals that need review or action.</p>
-                </div>
-                <AlertTriangle className="h-5 w-5 shrink-0 text-red-600" />
+            <div className="order-1 lg:order-2 relative">
+              <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white p-2 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+                <img src={parentReunionImage} alt="Parent reunited with child" className="w-full aspect-[4/3] object-cover rounded-2xl" />
               </div>
-              <div className="mt-4 space-y-3">
-                {alerts.map((alert) => (
-                  <div key={alert.title} className="rounded-2xl border border-slate-200 p-3 dark:border-slate-800 sm:p-4">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-start justify-between gap-3">
-                        <p className="font-bold text-slate-900 dark:text-white text-sm">{alert.title}</p>
-                        <span className={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-bold ${statusClasses(alert.level)}`}>
-                          {alert.level}
-                        </span>
-                      </div>
-                      <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{alert.detail}</p>
-                    </div>
+              {/* Floating badge */}
+              <div className="absolute -bottom-6 -left-6 rounded-3xl border border-emerald-100 bg-white p-5 shadow-xl dark:border-emerald-500/20 dark:bg-slate-900 hidden sm:block">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-inner">
+                    <CheckCircle2 className="h-7 w-7" />
                   </div>
+                  <div>
+                    <p className="text-base font-extrabold text-slate-900 dark:text-white">Community Driven</p>
+                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Together we protect</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Community Support */}
+          <section className="mt-20 sm:mt-28 grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div className="relative">
+              <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white p-2 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+                <img src={communitySupportImage} alt="Community support for children" className="w-full aspect-[4/3] object-cover rounded-2xl" />
+              </div>
+              <div className="absolute -top-6 -right-6 rounded-3xl border border-blue-100 bg-white p-5 shadow-xl dark:border-blue-500/20 dark:bg-slate-900 hidden sm:block">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 shadow-inner">
+                    <Shield className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <p className="text-base font-extrabold text-slate-900 dark:text-white">Trusted Authorities</p>
+                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Swift & safe action</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="lg:pl-10">
+              <span className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-800 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/30">
+                <Users className="h-3.5 w-3.5" /> A Network of Care
+              </span>
+              <h2 className="mt-4 text-3xl font-extrabold text-slate-950 dark:text-white sm:text-4xl lg:text-5xl tracking-tight">
+                Bridging the Gap Between Citizens and Protectors
+              </h2>
+              <p className="mt-5 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                Our system ensures that the moment a report is submitted, the right professionals are alerted. Social workers, police, and medical personnel collaborate seamlessly to ensure every child is placed in a safe environment.
+              </p>
+              <ul className="mt-8 space-y-4">
+                {[
+                  "Secure and anonymous reporting for all citizens.",
+                  "Instant notifications to the nearest authorities.",
+                  "Dedicated tracking for recovered and vulnerable children."
+                ].map((text, i) => (
+                  <li key={i} className="flex items-start gap-4">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 mt-0.5">
+                      <CheckCircle2 className="h-4 w-4" />
+                    </div>
+                    <span className="text-base font-medium text-slate-700 dark:text-slate-300">{text}</span>
+                  </li>
                 ))}
+              </ul>
+              
+              <div className="mt-10">
+                 <Link to="/report" className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 dark:bg-white px-6 py-4 text-sm font-extrabold text-white dark:text-slate-900 shadow-xl hover:-translate-y-0.5 hover:shadow-2xl transition-all">
+                    See How It Works <ChevronRight className="w-4 h-4" />
+                 </Link>
               </div>
             </div>
           </section>

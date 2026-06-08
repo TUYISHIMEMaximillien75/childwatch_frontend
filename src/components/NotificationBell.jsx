@@ -24,7 +24,7 @@ const TYPE_STYLES = {
   update:        "bg-slate-50 border-slate-100",
 };
 
-export default function NotificationBell({ accentColor = "blue" }) {
+export default function NotificationBell({ accentColor = "blue", onBellClick, onNotificationClick }) {
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unread, setUnread] = useState(0);
@@ -71,18 +71,45 @@ export default function NotificationBell({ accentColor = "blue" }) {
     setUnread(0);
   };
 
+  const handleBellClick = () => {
+    if (typeof onBellClick === "function") {
+      setOpen(false);
+      onBellClick();
+      return;
+    }
+    setOpen((prevOpen) => {
+      const nextOpen = !prevOpen;
+      if (!prevOpen) load();
+      return nextOpen;
+    });
+  };
+
+  const handleNotificationClick = async (notification) => {
+    if (!notification.is_read) {
+      try {
+        await markOne(notification.id);
+      } catch {
+        // ignore failure and continue navigating
+      }
+    }
+    setOpen(false);
+    if (typeof onNotificationClick === "function") {
+      onNotificationClick(notification);
+    }
+  };
+
   const accentRing = { blue: "ring-blue-400", green: "ring-green-500" }[accentColor] || "ring-blue-400";
 
   return (
     <div className="relative" ref={panelRef}>
       <button
-        onClick={() => { setOpen(o => !o); if (!open) load(); }}
+        onClick={handleBellClick}
         className={`relative p-2 rounded-xl hover:bg-slate-100 transition-colors ${open ? `ring-2 ${accentRing}` : ""}`}
         aria-label="Notifications"
       >
         <Bell className="w-5 h-5 text-slate-500" />
         {unread > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-extrabold rounded-full flex items-center justify-center px-1">
+          <span className="absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 bg-red-500 text-white text-[10px] font-extrabold rounded-full flex items-center justify-center px-1">
             {unread > 9 ? "9+" : unread}
           </span>
         )}
@@ -109,7 +136,7 @@ export default function NotificationBell({ accentColor = "blue" }) {
             {!loading && notifications.map(n => (
               <div
                 key={n.id}
-                onClick={() => !n.is_read && markOne(n.id)}
+                onClick={() => handleNotificationClick(n)}
                 className={`flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-slate-50 transition-colors ${!n.is_read ? "bg-blue-50/40" : ""}`}
               >
                 <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${!n.is_read ? "bg-blue-500" : "bg-slate-200"}`} />

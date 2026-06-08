@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { clearAuthSession, getAuthProfile } from "../utils/authStorage";
 import {
   getPoliceCases, getPoliceStats, getPoliceAlerts,
-  getPoliceDistrictStats, updatePoliceCaseStatus,
+  getPoliceDistrictStats, updatePoliceCaseStatus, getNotifications, downloadPoliceReport
 } from "../services/policeApi";
 import NotificationBell from "../components/NotificationBell";
 import FileUploadWidget from "../components/FileUploadWidget";
@@ -734,17 +734,25 @@ function NotesView({ cases }) {
 }
 
 function ReportsView() {
+  const handleDownload = async (type) => {
+    try {
+      await downloadPoliceReport(type);
+    } catch (err) {
+      alert("Failed to download report");
+    }
+  };
+
   return (
     <div className="space-y-5">
       <SectionTitle title="Generate Case Reports" sub="Export case documentation for official use" />
       <div className="grid sm:grid-cols-2 gap-4">
         {[
-          {title:"Full Case Report",    sub:"Complete investigation summary",  icon:FileText    },
-          {title:"Missing Child Report",sub:"Official missing persons form",   icon:User        },
-          {title:"Arrest/Suspect Log",  sub:"Suspect and arrest documentation",icon:Lock        },
-          {title:"Recovery Report",     sub:"Child recovery and outcome",      icon:CheckCircle2},
-          {title:"Evidence Log",        sub:"All uploaded evidence manifest",  icon:Camera      },
-          {title:"Monthly Summary",     sub:"All cases handled this month",    icon:Calendar    },
+          {title:"Full Case Report",    sub:"Complete investigation summary",  icon:FileText, type: "cases" },
+          {title:"Missing Child Report",sub:"Official missing persons form",   icon:User, type: "missing" },
+          {title:"Arrest/Suspect Log",  sub:"Suspect and arrest documentation",icon:Lock, type: "cases" },
+          {title:"Recovery Report",     sub:"Child recovery and outcome",      icon:CheckCircle2, type: "cases" },
+          {title:"Evidence Log",        sub:"All uploaded evidence manifest",  icon:Camera, type: "cases" },
+          {title:"Monthly Summary",     sub:"All cases handled this month",    icon:Calendar, type: "monthly" },
         ].map(r=>(
           <div key={r.title} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
             <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center mb-3">
@@ -753,8 +761,7 @@ function ReportsView() {
             <h3 className="text-[14px] font-bold text-slate-800 dark:text-white mb-1">{r.title}</h3>
             <p className="text-[12px] text-slate-500 dark:text-slate-400 mb-4">{r.sub}</p>
             <div className="flex gap-2">
-              <Btn variant="outline" className="flex-1 justify-center"><Download className="w-3.5 h-3.5" />PDF</Btn>
-              <Btn variant="outline" className="flex-1 justify-center"><Download className="w-3.5 h-3.5" />CSV</Btn>
+              <Btn variant="outline" className="w-full justify-center" onClick={() => handleDownload(r.type)}><Download className="w-3.5 h-3.5" />CSV</Btn>
             </div>
           </div>
         ))}
@@ -825,9 +832,27 @@ export default function PoliceDashboard() {
     };
     const loadAlerts = async () => {
       try {
-        const [alertsData, districtData] = await Promise.all([getPoliceAlerts(), getPoliceDistrictStats()]);
+        const [alertsData, districtData, notifsData] = await Promise.all([
+          getPoliceAlerts().catch(()=>({alerts:[]})), 
+          getPoliceDistrictStats().catch(()=>({districts:[]})),
+          getNotifications().catch(()=>({notifications:[]}))
+        ]);
         if (cancelled) return;
-        setAlerts(alertsData.alerts||[]);
+        
+        const caseAlerts = alertsData.alerts || [];
+        const sysNotifs = (notifsData.notifications || []).map(n => ({
+          caseId: null,
+          title: n.type === 'alert' ? "System Emergency Alert" : "System Notification",
+          text: n.message,
+          tag: n.type === 'alert' ? "Critical" : "Update",
+          urgency: n.type === 'alert' ? "critical" : "normal",
+          time: n.created_at,
+          isRead: n.is_read
+        }));
+        
+        const combined = [...caseAlerts, ...sysNotifs].sort((a, b) => new Date(b.time) - new Date(a.time));
+        
+        setAlerts(combined);
         setDistricts(districtData.districts||[]);
       } catch(err){ console.error("Alerts load failed:", err.message); }
       finally{ if(!cancelled) setAlertsLoading(false); }
@@ -908,7 +933,11 @@ export default function PoliceDashboard() {
             <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400">
               {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <NotificationBell accentColor="amber" />
+            <NotificationBell
+              accentColor="amber"
+              onBellClick={() => setActive("alerts")}
+              onNotificationClick={() => setActive("alerts")}
+            />
             <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-950/40 flex items-center justify-center">
               <span className="text-[11px] font-bold text-amber-700 dark:text-amber-400">{initials}</span>
             </div>

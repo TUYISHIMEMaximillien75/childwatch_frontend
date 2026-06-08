@@ -33,4 +33,22 @@ export const updatePoliceCaseStatus = (id, status) =>
 
 export const getPoliceAlerts       = () => request("/police/alerts");
 export const getPoliceDistrictStats = () => request("/police/district-stats");
+export const getNotifications       = () => request("/notifications");
+
+export const downloadPoliceReport = async (type) => {
+  const token = getAuthToken();
+  const res = await fetch(`${API_BASE_URL}/police/export?type=${type}&format=csv`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("Export failed");
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `police_${type}_report.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+};
 

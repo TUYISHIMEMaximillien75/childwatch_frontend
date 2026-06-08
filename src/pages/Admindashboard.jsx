@@ -76,7 +76,6 @@ const NAV_ITEMS = [
   { id:"evidence",     labelKey:"nav.evidence",     defaultLabel:"Evidence",         icon:Paperclip       },
   { id:"search",       labelKey:"nav.search",       defaultLabel:"Advanced Search",  icon:Search          },
   { id:"reports",      labelKey:"nav.reports",      defaultLabel:"Reports & Export", icon:FileDown        },
-  { id:"settings",     labelKey:"nav.settings",     defaultLabel:"Settings",         icon:Settings        },
   { id:"audit",        labelKey:"nav.audit",        defaultLabel:"Audit Logs",       icon:ScrollText      },
 ];
 
@@ -666,44 +665,114 @@ function InstitutionModal({ mode, institution, onClose, onSaved }) {
     }
   };
 
-  const inputClass = "w-full px-3 py-2.5 text-[13px] border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:border-yellow-400 bg-white dark:bg-slate-800 dark:text-amber-400 disabled:opacity-60";
+  const inputClass = "w-full px-4 py-3 text-[13px] border border-slate-200 dark:border-slate-800 rounded-xl outline-none focus:border-yellow-400 focus:ring-4 focus:ring-yellow-500/10 bg-slate-50/50 hover:bg-slate-50 dark:bg-slate-900/50 dark:hover:bg-slate-900 dark:text-slate-200 transition-all disabled:opacity-60 disabled:cursor-not-allowed";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-5">
-          <h3 className="text-[16px] font-extrabold text-slate-800 dark:text-slate-200">
-            {isCreate ? "Register Institution" : isEdit ? "Edit Institution" : "View Institution"}
-          </h3>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><X className="w-4 h-4 text-slate-500" /></button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
+      <div className="bg-white dark:bg-slate-950 rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-white/20 dark:border-white/5">
+        
+        {/* Header */}
+        <div className="flex items-center justify-between px-8 py-6 border-b border-slate-100 dark:border-slate-800/60 bg-slate-50/30 dark:bg-slate-900/20">
+          <div>
+            <h3 className="text-[18px] font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+              {isCreate ? "Register New Institution" : isEdit ? "Edit Institution Details" : "Institution Profile"}
+            </h3>
+            <p className="text-[13px] text-slate-500 dark:text-slate-400 mt-1">
+              {isCreate ? "Add a partner facility to the network." : "Manage existing institution information."}
+            </p>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
+            <X className="w-5 h-5" />
+          </button>
         </div>
-        <div className="space-y-4">
-          {[["Institution Name","name"],["Contact Person","contactPerson"],["Phone","phone"],["Email","email"],["Address","address"]].map(([lbl,key]) => (
-            <div key={key}>
-              <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">{lbl}</label>
-              <input disabled={isView} value={form[key]} onChange={e => setForm({...form,[key]:e.target.value})}
-                className={inputClass} placeholder={lbl} />
+
+        {/* Body */}
+        <div className="p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            {/* Full Width Name */}
+            <div className="md:col-span-2">
+              <label className="block text-[12px] font-bold text-slate-700 dark:text-slate-300 mb-2 tracking-wide">Institution Name *</label>
+              <div className="relative">
+                <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input disabled={isView} value={form.name} onChange={e => setForm({...form, name:e.target.value})}
+                  className={`${inputClass} pl-11`} placeholder="e.g. Kigali Central Hospital" />
+              </div>
             </div>
-          ))}
-          {[["Type","type",["Police","Hospital","Social Worker","NGO"]],["District","district",["Gasabo","Kicukiro","Nyarugenge","Bugesera","Gatsibo","Kayonza","Kirehe","Ngoma","Nyagatare","Rwamagana","Burera","Gakenke","Gicumbi","Musanze","Rulindo","Gisagara","Huye","Kamonyi","Muhanga","Nyamagabe","Nyamasheke","Nyanza","Ruhango","Karongi","Ngororero","Nyabihu","Rubavu","Rutsiro","Rusizi"]],["Status","status",["active","maintenance","inactive"]]].map(([lbl,key,opts]) => (
-            <div key={key}>
-              <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">{lbl}</label>
-              <select disabled={isView} value={form[key]} onChange={e => setForm({...form,[key]:e.target.value})}
-                className={inputClass}>
-                {opts.map(o => <option key={o}>{o}</option>)}
+
+            {/* Type & District */}
+            <div>
+              <label className="block text-[12px] font-bold text-slate-700 dark:text-slate-300 mb-2 tracking-wide">Facility Type *</label>
+              <select disabled={isView} value={form.type} onChange={e => setForm({...form, type:e.target.value})} className={inputClass}>
+                {["Police", "Hospital", "Social Worker", "NGO"].map(o => <option key={o}>{o}</option>)}
               </select>
             </div>
-          ))}
-        </div>
-        {error && <p className="text-[12px] text-red-600 mt-3">{error}</p>}
-        <div className="flex gap-3 mt-5">
-          <Btn variant="outline" size="md" onClick={onClose} className="flex-1 justify-center">Cancel</Btn>
-          {!isView && (
-            <Btn variant="primary" size="md" onClick={handleSave} className="flex-1 justify-center">
-              {saving ? "Saving..." : isCreate ? "Register" : "Save Changes"}
-            </Btn>
+            <div>
+              <label className="block text-[12px] font-bold text-slate-700 dark:text-slate-300 mb-2 tracking-wide">District *</label>
+              <select disabled={isView} value={form.district} onChange={e => setForm({...form, district:e.target.value})} className={inputClass}>
+                {["Gasabo","Kicukiro","Nyarugenge","Bugesera","Gatsibo","Kayonza","Kirehe","Ngoma","Nyagatare","Rwamagana","Burera","Gakenke","Gicumbi","Musanze","Rulindo","Gisagara","Huye","Kamonyi","Muhanga","Nyamagabe","Nyamasheke","Nyanza","Ruhango","Karongi","Ngororero","Nyabihu","Rubavu","Rutsiro","Rusizi"].map(o => <option key={o}>{o}</option>)}
+              </select>
+            </div>
+
+            {/* Contact Details */}
+            <div>
+              <label className="block text-[12px] font-bold text-slate-700 dark:text-slate-300 mb-2 tracking-wide">Phone Number</label>
+              <div className="relative">
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input disabled={isView} value={form.phone} onChange={e => setForm({...form, phone:e.target.value})} className={`${inputClass} pl-11`} placeholder="+250 788 000 000" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-[12px] font-bold text-slate-700 dark:text-slate-300 mb-2 tracking-wide">Email Address</label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input disabled={isView} value={form.email} onChange={e => setForm({...form, email:e.target.value})} className={`${inputClass} pl-11`} placeholder="contact@institution.rw" />
+              </div>
+            </div>
+
+            {/* Additional Info */}
+            <div>
+              <label className="block text-[12px] font-bold text-slate-700 dark:text-slate-300 mb-2 tracking-wide">Contact Person</label>
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input disabled={isView} value={form.contactPerson} onChange={e => setForm({...form, contactPerson:e.target.value})} className={`${inputClass} pl-11`} placeholder="Dr. John Doe" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-[12px] font-bold text-slate-700 dark:text-slate-300 mb-2 tracking-wide">Operational Status</label>
+              <select disabled={isView} value={form.status} onChange={e => setForm({...form, status:e.target.value})} className={inputClass}>
+                {["active","maintenance","inactive"].map(o => <option key={o}>{o}</option>)}
+              </select>
+            </div>
+
+            {/* Full Width Address */}
+            <div className="md:col-span-2">
+              <label className="block text-[12px] font-bold text-slate-700 dark:text-slate-300 mb-2 tracking-wide">Physical Address</label>
+              <div className="relative">
+                <MapPin className="absolute left-4 top-4 w-4 h-4 text-slate-400" />
+                <textarea disabled={isView} value={form.address} onChange={e => setForm({...form, address:e.target.value})} rows={2} className={`${inputClass} pl-11 resize-none py-3.5`} placeholder="Street name, Sector, Cell..." />
+              </div>
+            </div>
+          </div>
+          {error && (
+            <div className="mt-6 p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl text-[13px] text-red-600 dark:text-red-400 flex items-center gap-2 font-medium">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              {error}
+            </div>
           )}
         </div>
+
+        {/* Footer */}
+        <div className="px-8 py-5 border-t border-slate-100 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/50 flex justify-end gap-3">
+          <button onClick={onClose} className="px-6 py-2.5 text-[13px] font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl transition-colors">
+            {isView ? "Close" : "Cancel"}
+          </button>
+          {!isView && (
+            <button onClick={handleSave} disabled={saving} className="px-6 py-2.5 text-[13px] font-bold text-slate-900 bg-yellow-400 hover:bg-yellow-500 rounded-xl shadow-lg shadow-yellow-500/20 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 flex items-center gap-2">
+              {saving ? <><RefreshCw className="w-4 h-4 animate-spin" /> Saving...</> : isCreate ? <><CheckCircle2 className="w-4 h-4" /> Register</> : <><CheckCircle2 className="w-4 h-4" /> Save Changes</>}
+            </button>
+          )}
+        </div>
+
       </div>
     </div>
   );
@@ -714,6 +783,7 @@ function InstitutionsSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [modal, setModal] = useState(null); // {mode, institution}
+  const [search, setSearch] = useState("");
 
   const load = async () => {
     try {
@@ -730,63 +800,129 @@ function InstitutionsSection() {
   useEffect(() => { load(); }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Deactivate this institution?")) return;
+    if (!window.confirm("Are you sure you want to deactivate this institution?")) return;
     try { await deleteAdminInstitution(id); await load(); } catch(e) { setError(e.message); }
   };
 
+  const filtered = institutions.filter(i => i.name.toLowerCase().includes(search.toLowerCase()) || i.district.toLowerCase().includes(search.toLowerCase()));
+
   return (
-    <div className="space-y-5">
-      <SectionHeader
-        title="Institution Management"
-        sub={`${institutions.length} partner institutions`}
-        action={<Btn onClick={() => setModal({mode:"create",institution:null})}><Plus className="w-3.5 h-3.5" /> Register Institution</Btn>}
-      />
-      {error && <div className="text-[12px] text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2">{error}</div>}
-      {loading ? (
-        <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          {Array(4).fill(0).map((_,i) => <div key={i} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 animate-pulse h-48" />)}
+    <div className="space-y-6">
+      
+      {/* Header Area */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div>
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            <Building2 className="w-7 h-7 text-yellow-500" /> Institution Network
+          </h2>
+          <p className="text-[14px] text-slate-500 dark:text-slate-400 mt-1">Manage partner facilities, hospitals, and police stations.</p>
         </div>
-      ) : institutions.length === 0 ? (
-        <div className="text-center py-12 text-slate-400"><Building2 className="w-10 h-10 mx-auto mb-3 opacity-30" /><p className="text-[13px]">No institutions yet. Register one.</p></div>
+        <div className="flex gap-3">
+          <div className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-yellow-500 transition-colors" />
+            <input 
+              value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="Search by name or district..." 
+              className="w-full md:w-64 pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[13px] font-medium rounded-2xl outline-none focus:border-yellow-400 focus:ring-4 focus:ring-yellow-500/10 transition-all dark:text-slate-200"
+            />
+          </div>
+          <button 
+            onClick={() => setModal({mode:"create", institution:null})}
+            className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-5 py-3 rounded-2xl text-[13px] font-bold shadow-lg shadow-yellow-500/20 transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap"
+          >
+            <Plus className="w-4 h-4" /> Register New
+          </button>
+        </div>
+      </div>
+
+      {error && (
+        <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 p-4 rounded-2xl text-[13px] font-medium flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5" /> {error}
+        </div>
+      )}
+
+      {/* Grid */}
+      {loading ? (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {Array(8).fill(0).map((_,i) => (
+            <div key={i} className="rounded-3xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm animate-pulse h-64" />
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 rounded-3xl py-24 text-center">
+          <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+            <Building2 className="w-10 h-10 text-slate-300 dark:text-slate-600" />
+          </div>
+          <h3 className="text-[18px] font-extrabold text-slate-800 dark:text-slate-200 mb-1">No Institutions Found</h3>
+          <p className="text-[14px] text-slate-500 dark:text-slate-400 mb-6 max-w-sm">There are no facilities matching your search criteria, or none have been registered yet.</p>
+          <button onClick={() => setModal({mode:"create", institution:null})} className="text-yellow-600 dark:text-yellow-500 font-bold text-[14px] hover:underline flex items-center gap-1">
+            <Plus className="w-4 h-4" /> Add your first institution
+          </button>
+        </div>
       ) : (
-        <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-          {institutions.map(inst => (
-            <div key={inst.id} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between mb-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center
-                  ${inst.type==="Police"?"bg-yellow-50 text-yellow-600":inst.type==="Hospital"?"bg-green-50 text-green-600":"bg-teal-50 text-teal-600"}`}>
-                  <Building2 className="w-5 h-5" />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filtered.map(inst => (
+            <div key={inst.id} className="group bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:shadow-slate-200/40 dark:hover:shadow-black/40 hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-hidden">
+              
+              {/* Type Accent Strip */}
+              <div className={`absolute top-0 left-0 right-0 h-1.5 ${inst.type==="Police"?"bg-blue-500":inst.type==="Hospital"?"bg-green-500":inst.type==="NGO"?"bg-purple-500":"bg-yellow-500"}`} />
+
+              <div className="flex justify-between items-start mb-5 mt-1">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner
+                  ${inst.type==="Police"?"bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400":
+                    inst.type==="Hospital"?"bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400":
+                    inst.type==="NGO"?"bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400":
+                    "bg-yellow-50 text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-400"}`}>
+                  <Building2 className="w-6 h-6" />
                 </div>
-                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border
-                  ${inst.status==="active"?"bg-green-50 text-green-700 border-green-200":
-                    inst.status==="maintenance"?"bg-yellow-50 text-yellow-700 border-yellow-200":
-                    "bg-slate-50 dark:bg-slate-800/30 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-800"}`}>
+                <div className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border
+                  ${inst.status==="active"?"bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20":
+                    inst.status==="maintenance"?"bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20":
+                    "bg-slate-100 text-slate-500 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700"}`}>
                   {inst.status}
-                </span>
+                </div>
               </div>
-              <h3 className="text-[13px] font-bold text-slate-800 dark:text-slate-200 mb-1 leading-tight">{inst.name}</h3>
-              <p className="text-[11px] text-slate-400 mb-1">{inst.type} · {inst.district}</p>
-              {inst.contact_person && <p className="text-[11px] text-slate-400 mb-3">👤 {inst.contact_person}</p>}
-              <div className="flex gap-4 text-center mb-4">
-                <div><p className="text-[16px] font-extrabold text-yellow-600">{inst.users_count}</p><p className="text-[10px] text-slate-400">Users</p></div>
-                <div><p className="text-[16px] font-extrabold text-green-600">{inst.cases_count}</p><p className="text-[10px] text-slate-400">Cases</p></div>
+
+              <h3 className="text-[16px] font-extrabold text-slate-900 dark:text-slate-100 mb-1.5 line-clamp-1" title={inst.name}>{inst.name}</h3>
+              <div className="flex items-center gap-1.5 text-[12px] text-slate-500 dark:text-slate-400 font-medium mb-4">
+                <MapPin className="w-3.5 h-3.5 shrink-0" /> <span className="truncate">{inst.district}</span>
+                <span className="w-1 h-1 rounded-full bg-slate-300 mx-1" />
+                <span>{inst.type}</span>
               </div>
-              <div className="flex gap-2">
-                <Btn variant="ghost" className="justify-center" onClick={() => setModal({mode:"view",institution:inst})}><Eye className="w-3.5 h-3.5" /> View</Btn>
-                <Btn variant="outline" className="justify-center" onClick={() => setModal({mode:"edit",institution:inst})}><Edit2 className="w-3.5 h-3.5" /> Edit</Btn>
-                <Btn variant="danger" className="justify-center" onClick={() => handleDelete(inst.id)}><Trash2 className="w-3.5 h-3.5" /></Btn>
+
+              {/* Stats Bar */}
+              <div className="flex bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-3 mb-5 mt-auto border border-slate-100 dark:border-slate-800">
+                <div className="flex-1 text-center border-r border-slate-200 dark:border-slate-700">
+                  <p className="text-[18px] font-black text-slate-800 dark:text-slate-200">{inst.users_count}</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Users</p>
+                </div>
+                <div className="flex-1 text-center">
+                  <p className="text-[18px] font-black text-slate-800 dark:text-slate-200">{inst.cases_count}</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Cases</p>
+                </div>
               </div>
+
+              {/* Actions Grid */}
+              <div className="grid grid-cols-3 gap-2 mt-auto">
+                <button onClick={() => setModal({mode:"view",institution:inst})} className="flex items-center justify-center gap-1.5 py-2 rounded-xl text-[12px] font-bold text-slate-600 dark:text-slate-300 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">
+                  <Eye className="w-3.5 h-3.5" /> View
+                </button>
+                <button onClick={() => setModal({mode:"edit",institution:inst})} className="flex items-center justify-center gap-1.5 py-2 rounded-xl text-[12px] font-bold text-slate-600 dark:text-slate-300 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">
+                  <Edit2 className="w-3.5 h-3.5" /> Edit
+                </button>
+                <button onClick={() => handleDelete(inst.id)} className="flex items-center justify-center py-2 rounded-xl text-red-500 hover:text-white bg-red-50 hover:bg-red-500 dark:bg-red-500/10 dark:hover:bg-red-500 transition-colors">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+
             </div>
           ))}
         </div>
       )}
+
+      {/* Modal */}
       {modal && (
-        <InstitutionModal
-          mode={modal.mode}
-          institution={modal.institution}
-          onClose={() => setModal(null)}
-          onSaved={load}
-        />
+        <InstitutionModal mode={modal.mode} institution={modal.institution} onClose={() => setModal(null)} onSaved={load} />
       )}
     </div>
   );
@@ -1080,6 +1216,26 @@ function CasesSection() {
                   {viewCase.description || "—"}
                 </p>
               </div>
+              
+              {/* Images / Evidence */}
+              {viewCase.images && viewCase.images.length > 0 && (
+                <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl px-3 py-2.5">
+                  <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-2">Attached Evidence</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {viewCase.images.map((img, i) => {
+                      const src = img.startsWith('http') ? img : `https://childwatch-backend.onrender.com${img.startsWith('/') ? '' : '/'}${img}`;
+                      return (
+                        <a key={i} href={src} target="_blank" rel="noopener noreferrer" className="block relative group overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
+                          <img src={src} alt="Evidence" className="w-full h-24 object-cover transition-transform group-hover:scale-105" />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                            <Eye className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex gap-3 mt-5">
               <Btn variant="outline" size="md" onClick={() => setViewCase(null)} className="flex-1 justify-center">Close</Btn>
@@ -1440,69 +1596,6 @@ function ExportsSection() {
   );
 }
 
-function SettingsSection() {
-  const DEFAULTS = {
-    "Physical Abuse": true, "Sexual Abuse": true, "Emotional Abuse": true,
-    "Neglect": true, "Trafficking": true, "Exploitation": true,
-    "Submitted": true, "Verified": true, "Under Investigation": true,
-    "Escalated": true, "Resolved": true, "Closed": true, "Archived": false,
-    "In-App Notifications": true, "Email Alerts": true, "SMS Alerts": false,
-    "Push Notifications": false, "Broadcast Alerts": true,
-    "Auto-assign cases by district": false, "Escalation after 24h": true,
-    "Mandatory evidence review": false, "Two-factor authentication": false,
-  };
-  const [toggles, setToggles] = useState(DEFAULTS);
-  const [saved, setSaved] = useState(false);
-
-  const toggle = (key) => setToggles(prev => ({ ...prev, [key]: !prev[key] }));
-
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
-
-  return (
-    <div className="space-y-5">
-      <SectionHeader
-        title="System Settings"
-        sub="Configure platform behavior and categories"
-        action={
-          <Btn variant="primary" onClick={handleSave}>
-            {saved ? <><CheckCircle2 className="w-3.5 h-3.5" /> Saved!</> : "Save Settings"}
-          </Btn>
-        }
-      />
-      <div className="grid lg:grid-cols-2 gap-5">
-        {[
-          { title:"Abuse Categories", items:["Physical Abuse","Sexual Abuse","Emotional Abuse","Neglect","Trafficking","Exploitation"] },
-          { title:"Case Statuses",    items:["Submitted","Verified","Under Investigation","Escalated","Resolved","Closed","Archived"] },
-          { title:"Notification Channels", items:["In-App Notifications","Email Alerts","SMS Alerts","Push Notifications","Broadcast Alerts"] },
-          { title:"System Behavior",  items:["Auto-assign cases by district","Escalation after 24h","Mandatory evidence review","Two-factor authentication"] },
-        ].map(sec => (
-          <div key={sec.title} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
-            <p className="font-extrabold text-slate-800 dark:text-slate-200 mb-4">{sec.title}</p>
-            <div className="space-y-2">
-              {sec.items.map(item => (
-                <div key={item} className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/30">
-                  <span className="text-[13px] text-slate-700 dark:text-slate-300">{item}</span>
-                  <button
-                    onClick={() => toggle(item)}
-                    className={`w-9 h-5 rounded-full relative transition-colors duration-200 focus:outline-none ${
-                      toggles[item] ? "bg-yellow-500" : "bg-slate-300 dark:bg-slate-600"
-                    }`}>
-                    <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${
-                      toggles[item] ? "translate-x-4" : "translate-x-0.5"
-                    }`} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 function AuditSection() {
   const [logs, setLogs] = useState([]);
@@ -1712,7 +1805,6 @@ export default function AdminDashboard() {
     evidence:  <EvidenceSection />,
     search:    <SearchSection />,
     reports:   <ExportsSection />,
-    settings:  <SettingsSection />,
     audit:     <AuditSection />,
     profile:   <ProfilePage accentColor="blue" />,
   };
